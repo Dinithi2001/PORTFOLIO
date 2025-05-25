@@ -32,7 +32,7 @@ export const NavBar = ()=>{
             <div className="container flex items-center justify-between">
                 <a className="font-bold text-xl text-primary flex items-center" href="#hero">
                     <span className="relative z-10">
-                        <span className="text-glow text-foreground"> Dinithi </span> Portfolio
+                        <span className=" text-foreground"> Dinithi </span> Portfolio
                     </span> 
                 </a>
 

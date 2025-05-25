@@ -60,19 +60,47 @@
       opacity: 0;
     }
   }
+
+  @keyframes rainbow-pulse {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(-5%);
+    animation-timing-function: cubic-bezier(0.8,0,1,1);
+  }
+  50% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0,0,0.2,1);
+  }
+}
 }
 
 @layer base {
-  :root {
+  /* :root {
     --background: 210 40% 98%;
     --foreground: 222 47% 11%;
 
     --card: 0 0% 100%;
 
-    --primary: 50 100% 50%; /* Yellow */
-    --primary-foreground: 0 0% 0%; /* Black for better contrast */
+    --primary: 50 100% 50%; 
+    --primary-foreground: 0 0% 0%;
 
     --border: 214 32% 91%;
+  } */
+    :root {
+    --background: 60 100% 99%; /* Very light cream */
+    --foreground: 215 25% 27%; /* Dark blue-gray */
+    --card: 0 0% 100%; /* Pure white */
+    --primary: 320 100% 59%; /* Vibrant pink */
+    --primary-foreground: 0 0% 100%; /* White */
+    --border: 240 20% 95%; /* Very light gray */
   }
 
   .dark {
@@ -122,13 +150,43 @@
   }
 }
 
+@utility fun-text-shadow {
+    text-shadow: 2px 2px 0px theme('colors.pink.200'),
+                 4px 4px 0px theme('colors.purple.100');
+  }
+
+@utility fun-hover-scale {
+    @apply transition-transform duration-300 hover:scale-110;
+  }
+@utility rainbow-border {
+    border-image: linear-gradient(
+      to right,
+      theme('colors.pink.500'),
+      theme('colors.purple.500'),
+      theme('colors.blue.500'),
+      theme('colors.green.500'),
+      theme('colors.yellow.500'),
+      theme('colors.orange.500'),
+      theme('colors.red.500')
+    ) 1;
+  }
+
+
 @utility text-glow {
   @apply relative;
   text-shadow: 0 0 10px rgba(255, 230, 0, 0.5); /* Updated to yellow glow */
 }
 
 @utility card-hover {
-  @apply transition-transform duration-300 hover:scale-[1.02] hover:shadow-lg;
+  @apply transition-transform duration-300;
+  
+  .light & {
+    @apply hover:scale-[1.03] hover:shadow-lg rainbow-border;
+  }
+  
+  .dark & {
+    @apply hover:scale-[1.02];
+  }
 }
 
 @utility gradient-border {
@@ -140,8 +198,19 @@
 
 @utility cosmic-button {
   @apply px-6 py-2 rounded-full bg-primary text-primary-foreground font-medium 
-         transition-all duration-300 hover:shadow-[0_0_10px_rgba(255,230,0,0.5)] /* Updated to yellow shadow */
+         transition-all duration-300
          hover:scale-105 active:scale-95;
+         
+  .light & {
+    background: linear-gradient(45deg, theme('colors.pink.500'), theme('colors.purple.500'));
+    @apply shadow-md hover:shadow-lg fun-hover-scale;
+    animation: rainbow-pulse 3s ease infinite;
+    background-size: 200% 200%;
+  }
+  
+  .dark & {
+    @apply hover:shadow-[0_0_10px_rgba(255,230,0,0.5)];
+  }
 }
 
 @utility star {
@@ -152,6 +221,28 @@
 @utility meteor {
   @apply absolute bg-linear-to-r from-white via-white to-transparent rounded-full;
   box-shadow: 0 0 10px 5px rgba(255, 255, 255, 0.3);
+}
+
+.light .star {
+  background: radial-gradient(circle, theme('colors.pink.400') 0%, theme('colors.purple.400') 100%);
+  box-shadow: 0 0 10px 2px theme('colors.pink.200');
+}
+
+/* Update your existing components */
+.light .meteor {
+  background: linear-gradient(to right, theme('colors.pink.400'), theme('colors.purple.400'), transparent);
+  box-shadow: 0 0 10px 2px theme('colors.pink.200');
+}
+
+/* Add this for fun text elements in light mode */
+.light .fun-text {
+  @apply fun-text-shadow font-bold;
+  background: linear-gradient(45deg, theme('colors.pink.500'), theme('colors.purple.500'), theme('colors.blue.500'));
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: rainbow-pulse 5s ease infinite;
+  background-size: 200% 200%;
 }
 
 #root {
